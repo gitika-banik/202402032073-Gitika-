@@ -1,0 +1,253 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+struct Node *top = NULL;
+struct Node *front = NULL;
+struct Node *rear = NULL;
+
+// STACK OPERATIONS
+
+int isEmptyStack() {
+    return top == NULL;
+}
+
+void push(int value) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+
+    newNode->data = value;
+    newNode->next = top;
+    top = newNode;
+}
+
+void pop() {
+    if (isEmptyStack()) {
+        printf("Stack is Empty\n");
+        return;
+    }
+
+    struct Node *temp = top;
+    printf("Deleted from Stack: %d\n", temp->data);
+    top = top->next;
+    free(temp);
+}
+
+int countStack() {
+    int count = 0;
+    struct Node *temp = top;
+
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+
+    return count;
+}
+
+void reverseStack() {
+    struct Node *prev = NULL;
+    struct Node *current = top;
+    struct Node *next = NULL;
+
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    top = prev;
+}
+
+void displayStack() {
+    struct Node *temp = top;
+
+    printf("Stack: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// QUEUE OPERATIONS
+
+int isEmptyQueue() {
+    return front == NULL;
+}
+
+void enqueue(int value) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (rear == NULL) {
+        front = rear = newNode;
+    } else {
+        rear->next = newNode;
+        rear = newNode;
+    }
+}
+
+void dequeue() {
+    if (isEmptyQueue()) {
+        printf("Queue is Empty\n");
+        return;
+    }
+
+    struct Node *temp = front;
+    printf("Deleted from Queue: %d\n", temp->data);
+
+    front = front->next;
+
+    if (front == NULL)
+        rear = NULL;
+
+    free(temp);
+}
+
+int countQueue() {
+    int count = 0;
+    struct Node *temp = front;
+
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+
+    return count;
+}
+
+void reverseQueue() {
+    struct Node *prev = NULL;
+    struct Node *current = front;
+    struct Node *next = NULL;
+
+    rear = front;
+
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    front = prev;
+}
+
+void displayQueue() {
+    struct Node *temp = front;
+
+    printf("Queue: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// MAIN FUNCTION
+
+int main() {
+    int choice, value;
+
+    while (1) {
+        printf("\n\n1. Push Stack");
+        printf("\n2. Pop Stack");
+        printf("\n3. Check Stack Empty");
+        printf("\n4. Count Stack Elements");
+        printf("\n5. Reverse Stack");
+        printf("\n6. Display Stack");
+        printf("\n7. Enqueue Queue");
+        printf("\n8. Dequeue Queue");
+        printf("\n9. Check Queue Empty");
+        printf("\n10. Count Queue Elements");
+        printf("\n11. Reverse Queue");
+        printf("\n12. Display Queue");
+        printf("\n13. Exit");
+
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value: ");
+                scanf("%d", &value);
+                push(value);
+                break;
+
+            case 2:
+                pop();
+                break;
+
+            case 3:
+                printf(isEmptyStack() ?
+                       "Stack is Empty" : "Stack is Not Empty");
+                break;
+
+            case 4:
+                printf("Stack Elements: %d", countStack());
+                break;
+
+            case 5:
+                reverseStack();
+                printf("Stack Reversed\n");
+                break;
+
+            case 6:
+                displayStack();
+                break;
+
+            case 7:
+                printf("Enter value: ");
+                scanf("%d", &value);
+                enqueue(value);
+                break;
+
+            case 8:
+                dequeue();
+                break;
+
+            case 9:
+                printf(isEmptyQueue() ?
+                       "Queue is Empty" : "Queue is Not Empty");
+                break;
+
+            case 10:
+                printf("Queue Elements: %d", countQueue());
+                break;
+
+            case 11:
+                reverseQueue();
+                printf("Queue Reversed\n");
+                break;
+
+            case 12:
+                displayQueue();
+                break;
+
+            case 13:
+                return 0;
+
+            default:
+                printf("Invalid Choice\n");
+        }
+    }
+
+    return 0;
+}
